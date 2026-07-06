@@ -1,0 +1,11 @@
+# Carpetas temporales de Terraform
+.terraform/
+.terraform.lock.hcl
+
+# Archivos de estado (¡Muy importante no subirlos a Git todavía!)
+*.tfstate
+*.tfstate.*
+
+# Archivos donde guardas contraseñas o variables secretas
+*.tfvars
+*.tfvars.json
