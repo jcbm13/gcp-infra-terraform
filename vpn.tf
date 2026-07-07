@@ -89,3 +89,18 @@ resource "google_compute_route" "ruta_host_t2" {
   next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel2.id
   priority            = 200
 }
+
+resource "google_compute_route" "ruta_red2_t1" {
+  name                = "ruta-hacia-host-10-2-140-t1"
+  network             = google_compute_network.vpc_network.name
+  dest_range          = "10.2.196.124/32"
+  next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel2.id
+  priority            = 200
+}
+resource "google_compute_route" "ruta_red2_t2" {
+  name                = "ruta-hacia-host-10-2-140-t2"
+  network             = google_compute_network.vpc_network.name
+  dest_range          = "10.2.196.124/32"
+  next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel2.id
+  priority            = 200
+}
