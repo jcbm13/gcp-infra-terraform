@@ -27,8 +27,7 @@ resource "google_compute_instance" "vm_pruebas" {
     # ssh-keys = "desarrollador:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ... tu_email@institucion.gob.ec"
   }
 
-  # 🔹 OPCIÓN B (CONTRASEÑA POR DEFECTO VIA SCRIPT DE ARRANQUE)
-  # Crea el usuario 'operador' con la clave '#*M1/3deC?2o2-6' (o la que elijas) y habilita el acceso SSH estándar.
+  # 🔹 OPCIÓN B (CONTRASEÑA POR DEFECTO VIA SCRIPT DE ARRANQUE OPTIMIZADO)
   metadata_startup_script = <<EOF
     #!/bin/bash
     # 1. Crear el usuario del sistema si no existe
@@ -36,20 +35,29 @@ resource "google_compute_instance" "vm_pruebas" {
       useradd -m -s /bin/bash operador
     fi
     
-    # 2. Asignar la contraseña temporal de forma segura
+    # 2. Asignar la contraseña de forma segura
     echo "operador:#*M1/3deC?2o2-6" | chpasswd
     
     # 3. Otorgar permisos de Administrador (Sudo)
     usermod -aG sudo operador
     
-    # 4. Modificar la configuración de SSH para permitir autenticación por password
+    # 4. Asegurar autenticación por contraseña en Ubuntu 22.04 (Compatibilidad Total)
+    mkdir -p /etc/ssh/sshd_config.d/
+    echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/99-permita-password.conf
+    
+    # Configuración clásica por si acaso
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
     sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
     
-    # 5. Reiniciar el servicio SSH para aplicar cambios
-    systemctl restart sshd
+    # 5. Desactivar el firewall interno de Ubuntu (UFW) para evitar bloqueos
+    ufw disable
     
-    echo "Servidor de desarrollo listo para pruebas VPN con usuario operador" > /var/tmp/status.txt
+    # 6. Forzar el reinicio y habilitación del servicio SSH
+    systemctl unmask ssh
+    systemctl enable ssh
+    systemctl restart ssh
+    
+    echo "Servidor listo y SSH forzado en puerto 22" > /var/tmp/status.txt
   EOF
 }
 
@@ -58,7 +66,7 @@ resource "google_compute_instance" "vm_pruebas" {
 # =====================================================================
 resource "google_compute_firewall" "permitir_desde_redes_tierra" {
   name    = "allow-ssh-ping-from-institutional-networks"
-  network = google_compute_network.vpc_network.name
+  network = "crea-vpc"
 
   # Permitir Ping (ICMP)
   allow {
