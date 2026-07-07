@@ -75,6 +75,7 @@ resource "google_compute_firewall" "permitir_desde_redes_tierra" {
   source_ranges = [
     "10.2.105.0/24",
     "10.2.140.0/24",
-    "10.2.196.124/32"
+    "10.2.196.124/32",
+    "35.235.240.0/20"
   ]
 }
