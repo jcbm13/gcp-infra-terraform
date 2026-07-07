@@ -74,6 +74,7 @@ resource "google_compute_firewall" "permitir_desde_redes_tierra" {
   # 🔒 Orígenes permitidos estrictamente limitados a tus segmentos locales
   source_ranges = [
     "10.2.105.0/24",
+    "10.2.140.0/24",
     "10.2.196.124/32"
   ]
 }
