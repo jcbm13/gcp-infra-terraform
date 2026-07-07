@@ -94,7 +94,7 @@ resource "google_compute_route" "ruta_red2_t1" {
   name                = "ruta-hacia-host-10-2-140-t1"
   network             = google_compute_network.vpc_network.name
   dest_range          = "10.2.140.0/24"
-  next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel2.id
+  next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel1.id
   priority            = 200
 }
 resource "google_compute_route" "ruta_red2_t2" {
