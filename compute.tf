@@ -12,11 +12,14 @@ resource "google_compute_instance" "vm_pruebas" {
     }
   }
 
-  network_interface {
+    network_interface {
     subnetwork = google_compute_subnetwork.subred_desarrollo.id
-    network_ip = "10.254.1.10" # Tu IP Fija/Estática confirmada
+    network_ip = "10.254.1.10" 
 
-    # Al omitir access_config, la máquina NO tiene IP pública en internet.
+    # 🌐 Al agregar este bloque, GCP le asigna automáticamente una IP pública dinámica
+    access_config {
+      // Dejar vacío para IP externa efímera (dinámica)
+    }
   }
 
   # =====================================================================
